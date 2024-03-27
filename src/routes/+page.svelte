@@ -1,6 +1,7 @@
 <script>
 	import { writable } from 'svelte/store';
 	const date = new Date();
+	const reg = /^([1-9]|[1-2][0-9]|3[0-1])$/;
 	const months = ['jan', 'feb', 'mar', 'apr', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 	let i = 1;
 	let modal;
@@ -14,13 +15,7 @@
 	let tp = writable([0]);
 	let sp = writable(0);
 	let sum = 0;
-	let day1 = [];
-	let day2 = [];
-	let ppll = [];
-	let lpdl = [];
-	let ml;
 	let showw = [];
-	let myModal;
 	for (let y = 0; y < 32; y++) {
 		dayvar1.push(0);
 		dayvar2.push(0);
@@ -28,10 +23,6 @@
 		nod.push(0);
 		lpd.push(0);
 		$tp.push(0);
-		day1.push(0);
-		day2.push(0);
-		lpdl.push(0);
-		ppll.push(0);
 		showw.push(true);
 	}
 	function switchmonth(monthin) {
@@ -73,9 +64,9 @@
 				$daysinmonth = 31;
 				break;
 		}
-		ml.disabled = true;
 	}
 	function calcall() {
+		sum = 0;
 		for (let ca = 0; ca < i; ca++) {
 			calc(ca);
 			update(ca);
@@ -84,21 +75,15 @@
 	function calc(ii) {
 		nod[ii] = dayvar2[ii] - dayvar1[ii] + 1;
 		$tp[ii] = lpd[ii] * nod[ii] * ppl[ii];
-		day1[ii].disabled = true;
-		day2[ii].disabled = true;
-		lpdl[ii].disabled = true;
-		ppll[ii].disabled = true;
 	}
 	function clearsp() {
 		sp.set(0);
 		location.reload();
 	}
 	function update(ii) {
-		sum = 0;
 		sum = sum + $tp[ii];
 		sp.set(sum);
 	}
-	const reg = /^([1-9]|[1-2][0-9]|3[0-1])$/;
 	function check31(e) {
 		if (dayvar2[e - 1] != 31 && reg.test(dayvar2[e - 1])) {
 			i++;
@@ -110,68 +95,58 @@
 	}
 </script>
 
-<div class="text-center mid">
-	<div class="card border border-3 bg-dark mx-auto mt-2 mb-2 w-19">
-		<div class="text-center text-light card-header">
-			<h3>Milk price calculator</h3>
-		</div>
-		<div class="card-body row">
-			<div class="col w-100 mid">
-				<p class="text-center w-100 mid">Total Price: {$sp}</p>
-				<select
-					name="gg3"
-					id="val3"
-					class="form-select mid w-100 text-center bg-dark text-light border border-2"
-					bind:value={month}
-					on:change={() => {
-						switchmonth(month);
-					}}
-					bind:this={ml}
-				>
-					<option class="dropdown-item" value="jan">January</option>
-					<option class="dropdown-item" value="feb">February</option>
-					<option class="dropdown-item" value="mar">March</option>
-					<option class="dropdown-item" value="apr">April</option>
-					<option class="dropdown-item" value="may">May</option>
-					<option class="dropdown-item" value="jun">June</option>
-					<option class="dropdown-item" value="jul">July</option>
-					<option class="dropdown-item" value="aug">August</option>
-					<option class="dropdown-item" value="sep">September</option>
-					<option class="dropdown-item" value="oct">October</option>
-					<option class="dropdown-item" value="nov">November</option>
-					<option class="dropdown-item" value="dec">December</option>
-				</select>
-			</div>
-
-			<div class="text-center mid float-end col row">
-				<div class="col text-center w-100">
-					<button
-						class="w-40 rounded-3 mb-1 bg-secondary text-center mt-1 text-light"
-						on:click={calcall}>C</button
+<div class="clearfix">
+	<div class="card bg-dark w-19 left mt-5 border border-2 rounded-4">
+		<div class="card-header">Milk price calculator</div>
+		<div class="card-body">
+			<div class="float-start text-center">
+				<div class="">
+					<label for="val3">Month : </label>
+					<select
+						name="gg3"
+						id="val3"
+						class="btn mx-2 p-1 fs bg-secondary text-light"
+						bind:value={month}
+						on:change={() => {
+							switchmonth(month);
+							calcall;
+						}}
 					>
-
-					<button
-						class="w-40 rounded-3 mb-1 bg-secondary text-center mt-1 text-light"
-						on:click={clearsp}>CTP</button
+						<option class="dropdown-item" value="jan">January</option>
+						<option class="dropdown-item" value="feb">February</option>
+						<option class="dropdown-item" value="mar">March</option>
+						<option class="dropdown-item" value="apr">April</option>
+						<option class="dropdown-item" value="may">May</option>
+						<option class="dropdown-item" value="jun">June</option>
+						<option class="dropdown-item" value="jul">July</option>
+						<option class="dropdown-item" value="aug">August</option>
+						<option class="dropdown-item" value="sep">September</option>
+						<option class="dropdown-item" value="oct">October</option>
+						<option class="dropdown-item" value="nov">November</option>
+						<option class="dropdown-item" value="dec">December</option>
+					</select>
+				</div>
+				<div class="mt-4 float-start"><p>Total Price : {$sp}</p></div>
+			</div>
+			<div class="float-end">
+				<div class="">
+					<button class="w-40 bg-secondary fs rounded-3 p-1 text-light float-end" on:click={clearsp}
+						>Clear</button
 					>
 				</div>
-				<div class="col text-center w-100">
+				<div class="">
 					<button
-						class="w-40 mb-1 rounded-3 bg-secondary text-center mt-1 text-light text-light"
+						class="w-40 mt-4 mb-1 rounded-3 fs bg-secondary text-center mt-1 text-light text-light"
 						on:click={() => {
 							check31(i);
-						}}>AS</button
-					>
-
-					<button class="w-40 rounded-3 mb-1 bg-secondary text-center mt-1"
-						><a href="/help" class=" text-light">Help</a></button
-					>
+						}}
+						><h3>+</h3>
+					</button>
 				</div>
 			</div>
 		</div>
 	</div>
-
-	<table class="table mt-2 bg-dark text-light w-19">
+	<table class="table bg-dark text-light mt-3 w-19">
 		<tr>
 			<th class="border border-2">From</th>
 			<th class="border border-2">To</th>
@@ -190,7 +165,7 @@
 								class="btn fs w-40 mid bg-dark text-light"
 								id="val1"
 								bind:value={dayvar1[tt]}
-								bind:this={day1[tt]}
+								on:change={calcall}
 							>
 								{#each { length: $daysinmonth } as b, j}
 									{#if tt - 1 >= 0}
@@ -205,7 +180,7 @@
 								class="btn fs w-40 mid bg-dark text-light"
 								id="val1"
 								bind:value={dayvar1[tt]}
-								bind:this={day1[tt]}
+								on:change={calcall}
 							>
 								<option class="dropdown-item" value={1}>1</option>
 							</select>{/if}</td
@@ -216,8 +191,9 @@
 							name="gg2"
 							id="val2"
 							bind:value={dayvar2[tt]}
-							bind:this={day2[tt]}
+							on:change={calcall}
 						>
+							<option value="0" />
 							{#each { length: $daysinmonth + 1 } as b, j}
 								{#if dayvar1[tt]}
 									{#if j + 1 > dayvar1[tt]}
@@ -235,7 +211,7 @@
 								placeholder="price of milk"
 								name="email"
 								bind:value={ppl[tt]}
-								bind:this={ppll[tt]}
+								on:change={calcall}
 							/>
 						</div></td
 					>
@@ -247,7 +223,7 @@
 								placeholder="liters of milk"
 								name="pswd"
 								bind:value={lpd[tt]}
-								bind:this={lpdl[tt]}
+								on:change={calcall}
 							/>
 						</div>
 					</td>
@@ -259,6 +235,9 @@
 </div>
 
 <style>
+	.left {
+		text-align: left;
+	}
 	.w-19 {
 		width: 95vw;
 		text-align: center;
