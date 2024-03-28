@@ -85,7 +85,7 @@
 		sp.set(sum);
 	}
 	function check31(e) {
-		if (dayvar2[e - 1] != 31 && reg.test(dayvar2[e - 1])) {
+		if (dayvar2[e - 1] != daysinmonth && reg.test(dayvar2[e - 1])) {
 			i++;
 		} else {
 			alert(
@@ -95,7 +95,7 @@
 	}
 </script>
 
-<div class="clearfix">
+<div class="clearfix text-center">
 	<div class="card bg-dark w-19 left mt-5 border border-2 rounded-4">
 		<div class="card-header">Milk price calculator</div>
 		<div class="card-body">
@@ -105,7 +105,7 @@
 					<select
 						name="gg3"
 						id="val3"
-						class="btn mx-2 p-1 fs bg-secondary text-light"
+						class="btn py-1 fs bg-secondary text-light"
 						bind:value={month}
 						on:change={() => {
 							switchmonth(month);
@@ -146,7 +146,7 @@
 			</div>
 		</div>
 	</div>
-	<table class="table bg-dark text-light mt-3 w-19">
+	<table class="bg-dark text-light mt-3 w-19">
 		<tr>
 			<th class="border border-2">From</th>
 			<th class="border border-2">To</th>
@@ -204,9 +204,9 @@
 						</select></td
 					>
 					<td class="border border-2"
-						><div class="text-center mid w-40">
+						><div class="text-center mid w-40 number-container">
 							<input
-								class="cform-control mid w-40 bg-dark text-light"
+								class="dynamic-number cform-control mid w-40 bg-dark text-light"
 								id="email"
 								placeholder="price of milk"
 								name="email"
@@ -216,9 +216,9 @@
 						</div></td
 					>
 					<td class="border border-2"
-						><div class="text-center mid w-40">
+						><div class="text-center mid w-40 number-container">
 							<input
-								class="cform-control mid w-40 bg-dark text-light"
+								class="dynamic-number cform-control mid w-40 bg-dark text-light"
 								id="pwd2"
 								placeholder="liters of milk"
 								name="pswd"
@@ -227,7 +227,11 @@
 							/>
 						</div>
 					</td>
-					<td class="border border-2 w-40">{$tp[tt]}</td>
+					<td class="border border-2 w-40 px-1 fsm text-center">
+						<div class="number-container text-center">
+							<span class="dynamic-number text-center">{$tp[tt]}</span>
+						</div></td
+					>
 				</tr>
 			{/if}
 		{/each}
@@ -235,6 +239,17 @@
 </div>
 
 <style>
+	.number-container {
+		max-width: 15vw; /* Set your maximum width */
+	}
+
+	.dynamic-number {
+		word-wrap: break-word; /* Break the number into multiple lines if it exceeds the width */
+	}
+	.fsm {
+		font-size: 15px;
+		font-family: sans-serif;
+	}
 	.left {
 		text-align: left;
 	}
@@ -265,42 +280,6 @@
 	.fs:focus {
 		outline: 0;
 	}
-
-	/*.cbtn {
-		--bs-btn-padding-x: 0.75rem;
-		--bs-btn-padding-y: 0.375rem;
-		--bs-btn-font-family: ;
-		--bs-btn-font-size: 1rem;
-		--bs-btn-font-weight: 400;
-		--bs-btn-line-height: 1.5;
-		--bs-btn-color: #212529;
-		--bs-btn-bg: transparent;
-		--bs-btn-border-width: 1px;
-		--bs-btn-border-color: transparent;
-		--bs-btn-border-radius: 0.375rem;
-		--bs-btn-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
-		--bs-btn-disabled-opacity: 0.65;
-		--bs-btn-focus-box-shadow: 0 0 0 0.25rem rgba(var(--bs-btn-focus-shadow-rgb), 0.5);
-		display: inline-block;
-		padding: var(--bs-btn-padding-y) var(--bs-btn-padding-x);
-		font-family: var(--bs-btn-font-family);
-		font-size: var(--bs-btn-font-size);
-		font-weight: var(--bs-btn-font-weight);
-		line-height: var(--bs-btn-line-height);
-		color: var(--bs-btn-color);
-		text-align: center;
-		text-decoration: none;
-		vertical-align: middle;
-		cursor: pointer;
-		-webkit-user-select: none;
-		-moz-user-select: none;
-		user-select: none;
-		border: var(--bs-btn-border-width) solid var(--bs-btn-border-color);
-		border-radius: var(--bs-btn-border-radius);
-		background-color: var(--bs-btn-bg);
-		transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-			border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-	}*/
 	.cform-control:focus {
 		outline: 0;
 	}
